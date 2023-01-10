@@ -64,14 +64,14 @@ if [[ "$fee" -le 0 ]]; then
 fi
 
 changeADDR1=$(( ( payorBALANCE1 - amountInLL ) - (fee / 2) ))
-changeADDR2=$(( ( payorBALANCE2 - amountInLL ) - (fee / 2) - 1 ))
+changeADDR2=$(( ( payorBALANCE2 - amountInLL ) - (fee / 2) ))
 
 modDiv=$(( fee % 2 ))
 # If fee division is not even, then 
 # second address pays +1 lovelace so
 # the math can be precise.
 if [[ "$modDiv" -ne "0" ]]; then
-  changeADDR2=$(( changeADDR2 + 1 ))
+  changeADDR2=$(( changeADDR2 - 1 ))
 fi
 
 tmpRaw=$(mktemp)

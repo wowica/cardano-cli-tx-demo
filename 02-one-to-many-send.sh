@@ -5,8 +5,8 @@
 #####################################################
 
 # Enter the UTXO under 01.addr which ADA will be spent from
-payorUTXO1="e443f61a2fc7f6464ffde8c9d0f4884165b0b457f81cb5b9d280273aa2c78766#1"
-payorUTXO2="a747caebe7442071b0d5e9b1cb3b3a1cece784934331822dccabf5b37a210768#0"
+payorUTXO1=""
+payorUTXO2=""
 
 
 ############################################################################
