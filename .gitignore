@@ -1,0 +1,4 @@
+wallets/**.addr
+wallets/**.pkh
+wallets/**.skey
+wallets/**.vkey

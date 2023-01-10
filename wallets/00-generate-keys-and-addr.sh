@@ -22,5 +22,5 @@ cardano-cli address key-hash \
   --out-file $keyName.pkh
 
 echo "Generated files:"
-ls -l wallets | grep -i $keyName
+ls -l . | grep -i $keyName
 
