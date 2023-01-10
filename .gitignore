@@ -2,3 +2,6 @@ wallets/**.addr
 wallets/**.pkh
 wallets/**.skey
 wallets/**.vkey
+**.body
+**.signed
+protocol.json
