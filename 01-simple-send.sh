@@ -17,23 +17,29 @@ amountInADA=5
 payorADDR=$(cat wallets/01.addr)
 destinationADDR="$(cat wallets/02.addr)"
 
+tmpBuild=$(mktemp)
+
 cardano-cli transaction build \
   --testnet-magic 1 \
   --change-address $payorADDR \
   --tx-in $payorUTXO \
   --tx-out "$destinationADDR $(($amountInADA*1000000)) lovelace" \
-  --out-file tx01.body
+  --out-file $tmpBuild
 
-[ $? -eq 0 ]  || (echo "Error building transaction" && exit 1)
+[ $? -eq 0 ]  || { echo "Error building transaction"; exit 1; }
+
+echo "banana"
+
+tmpSig=$(mktemp)
 
 cardano-cli transaction sign \
-  --tx-body-file tx01.body \
+  --tx-body-file $tmpBuild \
   --signing-key-file wallets/01.skey \
   --testnet-magic 1 \
-  --out-file tx01.signed
+  --out-file $tmpSig
 
 cardano-cli transaction submit \
   --testnet-magic 1 \
-  --tx-file tx01.signed
+  --tx-file $tmpSig
 
-cardano-cli transaction txid --tx-file tx01.signed
+cardano-cli transaction txid --tx-file $tmpSig

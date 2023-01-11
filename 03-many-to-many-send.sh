@@ -10,7 +10,7 @@
 payorUTXO1=""
 payorUTXO2=""
 
-# First, run this script this value empty so that fee
+# First, run this script with fee value empty so that fee
 # can be calculated and printed to the screen.
 # Then, populate this variable with the amount displayed
 # and run script again.
@@ -36,10 +36,10 @@ payorBALANCE2=$(cardano-cli query utxo --tx-in $payorUTXO2 --testnet-magic 1 | t
 destinationADDR1="$(cat wallets/03.addr)"
 destinationADDR2="$(cat wallets/04.addr)"
 
-tmpFile=$(mktemp)
-
 # Enter if block only when calculating fee
 if [[ "$fee" -le 0 ]]; then
+  tmpFile=$(mktemp)
+
   echo "Tx Fee: "
 
   cardano-cli transaction build-raw \
@@ -77,17 +77,16 @@ fi
 tmpRaw=$(mktemp)
 
 # For debugging purposes :)
-command="cardano-cli transaction build-raw \
-  --tx-in ${payorUTXO1} \
-  --tx-in ${payorUTXO2} \
-  --tx-out \"${destinationADDR1} ${amountInLL} lovelace\" \
-  --tx-out \"${destinationADDR2} ${amountInLL} lovelace\" \
-  --tx-out \"${payorADDR1} ${changeADDR1} lovelace\" \
-  --tx-out \"${payorADDR2} ${changeADDR2} lovelace\" \
-  --fee ${fee} \
-  --out-file ${tmpRaw}"
-
 # Uncoment lines below for debugging
+# command="cardano-cli transaction build-raw \
+#   --tx-in ${payorUTXO1} \
+#   --tx-in ${payorUTXO2} \
+#   --tx-out \"${destinationADDR1} ${amountInLL} lovelace\" \
+#   --tx-out \"${destinationADDR2} ${amountInLL} lovelace\" \
+#   --tx-out \"${payorADDR1} ${changeADDR1} lovelace\" \
+#   --tx-out \"${payorADDR2} ${changeADDR2} lovelace\" \
+#   --fee ${fee} \
+#   --out-file ${tmpRaw}"
 # echo $command
 # exit 0
 
@@ -101,20 +100,19 @@ cardano-cli transaction build-raw \
   --fee $fee \
   --out-file $tmpRaw
 
-[ $? -eq 0 ]  || (echo "Error building transaction" && exit 1)
+[ $? -eq 0 ]  || { echo "Error building transaction"; exit 1; }
 
-tmpSg=$(mktemp)
+tmpSig=$(mktemp)
 
 cardano-cli transaction sign \
   --tx-body-file $tmpRaw \
   --signing-key-file wallets/01.skey \
   --signing-key-file wallets/02.skey \
   --testnet-magic 1 \
-  --out-file $tmpSg
+  --out-file $tmpSig
 
 cardano-cli transaction submit \
   --testnet-magic 1 \
-  --tx-file $tmpSg
+  --tx-file $tmpSig
 
-cardano-cli transaction txid --tx-file $tmpSg
-
+cardano-cli transaction txid --tx-file $tmpSig
