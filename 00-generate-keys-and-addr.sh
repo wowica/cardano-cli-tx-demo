@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Takes one argument and generates verification key, 
-# signing key and preprod testnet address.
+# signing key and testnet address for preprod (--testnet-magic 1)
 
 if [[ ! $# -gt 0 ]]; then
   echo "Missing wallet name as argument" && exit 1
@@ -16,10 +16,6 @@ cardano-cli address key-gen \
 cardano-cli address build \
   --payment-verification-key-file wallets/$keyName.vkey \
   --out-file wallets/$keyName.addr --testnet-magic 1
-
-cardano-cli address key-hash \
-  --payment-verification-key-file wallets/$keyName.vkey \
-  --out-file wallets/$keyName.pkh
 
 echo "Generated files in wallets folder:"
 ls -l wallets | grep -i $keyName

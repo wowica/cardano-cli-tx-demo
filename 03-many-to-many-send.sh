@@ -1,14 +1,29 @@
 #!/bin/bash
 
-############################################
-### Sends ADA from 01.addr and 02.addr,  ###
-###           to 03.addr and 04.addr     ###
-############################################
+###########################################
+### Sends ADA from multiple addresses,  ###
+###           to multiple addresses.    ###
+###########################################
 
-# Enter the UTXOs under 01.addr and 02.addr 
-# which ADA + transaction fees will be spent from
+# Enter the UTXOs which ADA + transaction fees 
+# will be spent from
 payorUTXO1=""
 payorUTXO2=""
+
+# Addresses for change
+payorADDR1=$()
+payorADDR2=$()
+
+# Amount in ADA which the two
+# destination addresses will receive
+amountInADA1=10
+amountInADA2=12
+
+destinationADDR1=$()
+destinationADDR2=$()
+
+txSignatory1=""
+txSignatory2=""
 
 # First, run this script with fee value empty so that fee
 # can be calculated and printed to the screen.
@@ -20,21 +35,13 @@ fee=""
 ## No need to modify code below when following directions from the README ##
 ############################################################################
 
-# Amount in ADA which the two
-# destination addresses will receive
-amountInADA=2
 # convert to Lovelaces
-amountInLL=$(( amountInADA*1000000 ))
+amountInLL1=$(( amountInADA1*1000000 ))
+amountInLL2=$(( amountInADA2*1000000 ))
 
-# Address for change
-payorADDR1=$(cat wallets/01.addr)
-payorADDR2=$(cat wallets/02.addr)
 # Calculate fees
 payorBALANCE1=$(cardano-cli query utxo --tx-in $payorUTXO1 --testnet-magic 1 | tail -n 1 | tr -s " " | cut -d " " -f 3)
 payorBALANCE2=$(cardano-cli query utxo --tx-in $payorUTXO2 --testnet-magic 1 | tail -n 1 | tr -s " " | cut -d " " -f 3)
-
-destinationADDR1="$(cat wallets/03.addr)"
-destinationADDR2="$(cat wallets/04.addr)"
 
 # Enter if block only when calculating fee
 if [[ "$fee" -le 0 ]]; then
@@ -63,13 +70,13 @@ if [[ "$fee" -le 0 ]]; then
   exit 0
 fi
 
-changeADDR1=$(( ( payorBALANCE1 - amountInLL ) - (fee / 2) ))
-changeADDR2=$(( ( payorBALANCE2 - amountInLL ) - (fee / 2) ))
+changeADDR1=$(( ( payorBALANCE1 - amountInLL1 ) - (fee / 2) ))
+changeADDR2=$(( ( payorBALANCE2 - amountInLL2 ) - (fee / 2) ))
 
 modDiv=$(( fee % 2 ))
 # If fee division is not even, then 
-# second address pays +1 lovelace so
-# the math can be precise.
+# second address pays +1 lovelace in fees
+# so the math can be precise.
 if [[ "$modDiv" -ne "0" ]]; then
   changeADDR2=$(( changeADDR2 - 1 ))
 fi
@@ -81,8 +88,8 @@ tmpRaw=$(mktemp)
 # command="cardano-cli transaction build-raw \
 #   --tx-in ${payorUTXO1} \
 #   --tx-in ${payorUTXO2} \
-#   --tx-out \"${destinationADDR1} ${amountInLL} lovelace\" \
-#   --tx-out \"${destinationADDR2} ${amountInLL} lovelace\" \
+#   --tx-out \"${destinationADDR1} ${amountInLL1} lovelace\" \
+#   --tx-out \"${destinationADDR2} ${amountInLL2} lovelace\" \
 #   --tx-out \"${payorADDR1} ${changeADDR1} lovelace\" \
 #   --tx-out \"${payorADDR2} ${changeADDR2} lovelace\" \
 #   --fee ${fee} \
@@ -93,8 +100,8 @@ tmpRaw=$(mktemp)
 cardano-cli transaction build-raw \
   --tx-in $payorUTXO1 \
   --tx-in $payorUTXO2 \
-  --tx-out "$destinationADDR1 $amountInLL lovelace" \
-  --tx-out "$destinationADDR2 $amountInLL lovelace" \
+  --tx-out "$destinationADDR1 $amountInLL1 lovelace" \
+  --tx-out "$destinationADDR2 $amountInLL2 lovelace" \
   --tx-out "$payorADDR1 $changeADDR1 lovelace" \
   --tx-out "$payorADDR2 $changeADDR2 lovelace" \
   --fee $fee \
@@ -105,10 +112,10 @@ cardano-cli transaction build-raw \
 tmpSig=$(mktemp)
 
 cardano-cli transaction sign \
-  --tx-body-file $tmpRaw \
-  --signing-key-file wallets/01.skey \
-  --signing-key-file wallets/02.skey \
   --testnet-magic 1 \
+  --tx-body-file $tmpRaw \
+  --signing-key-file $txSignatory1 \
+  --signing-key-file $txSignatory2 \
   --out-file $tmpSig
 
 cardano-cli transaction submit \
