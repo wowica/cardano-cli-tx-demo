@@ -5,6 +5,7 @@
 
 destADDR=""
 payorUTXO=""
+txSignatory=""
 
 # First, run this script with fee value empty so that fee
 # can be calculated and printed to the screen.
@@ -19,7 +20,7 @@ if [[ "$fee" -le 0 ]]; then
   echo "Tx Fee: "
 
   cardano-cli transaction build-raw \
-    --tx-in $payorUTXO1 \
+    --tx-in $payorUTXO \
     --tx-out "$destADDR 0 lovelace" \
     --fee 0 \
     --out-file $tmpFile
@@ -38,7 +39,7 @@ fi
 tmpRaw=$(mktemp)
 
 cardano-cli transaction build-raw \
-  --tx-in $payorUTXO1 \
+  --tx-in $payorUTXO \
   --tx-out "$destADDR $amountInLL lovelace" \
   --fee $fee \
   --out-file $tmpRaw
@@ -49,7 +50,7 @@ tmpSig=$(mktemp)
 
 cardano-cli transaction sign \
   --tx-body-file $tmpRaw \
-  --signing-key-file wallets/01.skey \
+  --signing-key-file $txSignatory \
   --testnet-magic 1 \
   --out-file $tmpSig
 
