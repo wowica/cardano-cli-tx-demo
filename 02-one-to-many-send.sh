@@ -6,18 +6,18 @@
 
 # Enter the UTXO which ADA + transaction fees
 # will be spent from
-payorUTXO="080c2db94922b69eacbcf6c36e0e1fe7cdcb981e13a74c607a7468016e5e1282#1"
+payorUTXO=""
 
 # Amount in ADA which will be converted to lovelace
 amountInADA1=20
 amountInADA2=22
 # Addresses ADA will be sent to
-destinationADDR1="$(cat wallets/bob.addr)"
-destinationADDR2="$(cat wallets/charlie.addr)"
+destinationADDR1="$()"
+destinationADDR2="$()"
 # Address for change
-payorADDR=$(cat wallets/alice.addr)
+payorADDR=$()
 # Signature file of sender
-txSignatory="wallets/alice.skey"
+txSignatory=""
 
 ####################################
 ### No need to change code below ###

@@ -1,7 +1,11 @@
 #!/bin/bash
 
-# Takes one argument and generates verification key, 
-# signing key and testnet address for preprod (--testnet-magic 1)
+# Takes one argument and generates the following for
+# use with Preprod Testnet (--testnet-magic 1)
+#
+# 1- Verification key
+# 2- Signing key
+# 3- Address (preprod testnet)
 
 if [[ ! $# -gt 0 ]]; then
   echo "Missing wallet name as argument" && exit 1

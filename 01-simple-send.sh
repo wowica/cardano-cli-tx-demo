@@ -8,8 +8,8 @@
 # will be spent from
 payorUTXO=""
 
-# Amount in ADA which will be converted to lovelace
-amountInADA=20
+# Amount in ADA
+amountInADA=10
 # Address ADA will be sent to
 destinationADDR=$()
 # Address for change

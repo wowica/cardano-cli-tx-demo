@@ -5,6 +5,7 @@
 
 destADDR=""
 payorUTXO=""
+totalAmountInUTXO=""
 txSignatory=""
 
 # First, run this script with fee value empty so that fee
@@ -12,7 +13,12 @@ txSignatory=""
 # Then, populate this variable with the amount displayed
 # and run script again.
 fee=""
-amountInLL=""
+
+############################################################################
+## No need to modify code below when following directions from the README ##
+############################################################################
+
+amountInLL=$((totalAmountInUTXO-fee))
 
 if [[ "$fee" -le 0 ]]; then
   tmpFile=$(mktemp)
