@@ -12,9 +12,3 @@ $ ./00-generate-keys-and-addr.sh 02
 $ ./00-generate-keys-and-addr.sh 03
 $ ./00-generate-keys-and-addr.sh 04
 ```
-
-## Protocol Params
-
-```bash
-$ cardano-cli query protocol-parameters --out-file protocol.json --testnet-magic 1
-```

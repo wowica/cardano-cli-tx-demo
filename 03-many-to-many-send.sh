@@ -47,6 +47,13 @@ payorBALANCE2=$(cardano-cli query utxo --tx-in $payorUTXO2 --testnet-magic 1 | t
 if [[ "$fee" -le 0 ]]; then
   tmpFile=$(mktemp)
 
+  # Check for the presence of protocol.json.
+  # This file is needed in order to calculate the fee for the transaction.
+  # In case it's not present, then download it.
+  if [ ! -f protocol.json ]; then
+    cardano-cli query protocol-parameters --out-file protocol.json --testnet-magic 1
+  fi
+
   echo "Tx Fee: "
 
   cardano-cli transaction build-raw \
