@@ -7,8 +7,8 @@ This is a simple demo showing different ways to use the `cardano-cli` to transfe
 The following list of commands will generate the necessary keys and addresses used on the demo.
 
 ```bash
-$ ./00-generate-keys-and-addr.sh 01
-$ ./00-generate-keys-and-addr.sh 02
-$ ./00-generate-keys-and-addr.sh 03
-$ ./00-generate-keys-and-addr.sh 04
+$ ./00-generate-keys-and-addr.sh alice
+$ ./00-generate-keys-and-addr.sh bob
+$ ./00-generate-keys-and-addr.sh charlie
+$ ./00-generate-keys-and-addr.sh daisy
 ```
