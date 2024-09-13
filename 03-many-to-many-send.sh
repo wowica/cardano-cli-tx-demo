@@ -56,17 +56,23 @@ if [[ "$fee" -le 0 ]]; then
 
   echo "Tx Fee: "
 
-  cardano-cli transaction build-raw \
+  # For the sake of simplicity, this script does not accurately calculate tx fee.
+  # See comment below for proper way to caculate fee.
+  # https://github.com/IntersectMBO/cardano-cli/issues/827#issuecomment-2214328286
+
+  dummyFeeInLL=10000
+
+  cardano-cli conway transaction build-raw \
     --tx-in $payorUTXO1 \
     --tx-in $payorUTXO2 \
-    --tx-out "$destinationADDR1 0 lovelace" \
-    --tx-out "$destinationADDR2 0 lovelace" \
-    --tx-out "$payorADDR1 0 lovelace" \
-    --tx-out "$payorADDR2 0 lovelace" \
+    --tx-out "$destinationADDR1 $((amountInLL1 - dummyFeeInLL)) lovelace" \
+    --tx-out "$destinationADDR2 $((amountInLL2 - dummyFeeInLL)) lovelace" \
+    --tx-out "$payorADDR1 $dummyFeeInLL lovelace" \
+    --tx-out "$payorADDR2 $dummyFeeInLL lovelace" \
     --fee 0 \
     --out-file $tmpFile
 
-  cardano-cli transaction calculate-min-fee \
+  cardano-cli conway transaction calculate-min-fee \
       --testnet-magic 1 \
       --tx-body-file $tmpFile \
       --tx-in-count 2 \
