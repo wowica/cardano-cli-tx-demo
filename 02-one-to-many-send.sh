@@ -25,7 +25,7 @@ txSignatory=""
 
 tmpBuild=$(mktemp)
 
-cardano-cli transaction build \
+cardano-cli conway transaction build \
   --testnet-magic 1 \
   --tx-in $payorUTXO \
   --tx-out "$destinationADDR1 $(($amountInADA1*1000000)) lovelace" \

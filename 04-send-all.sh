@@ -32,9 +32,13 @@ if [[ "$fee" -le 0 ]]; then
 
   echo "Tx Fee: "
 
+  # For the sake of simplicity, this script does not accurately calculate tx fee.
+  # See comment below for proper way to caculate fee.
+  # https://github.com/IntersectMBO/cardano-cli/issues/827#issuecomment-2214328286
+
   cardano-cli transaction build-raw \
     --tx-in $payorUTXO \
-    --tx-out "$destADDR 0 lovelace" \
+    --tx-out "$destADDR $totalAmountInUTXO lovelace" \
     --fee 0 \
     --out-file $tmpFile
 
